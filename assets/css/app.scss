@@ -1,0 +1,7 @@
+@charset "utf-8";
+$navbar-breakpoint: 568px;
+
+@import '~bulma/bulma';
+
+$fa-font-path: '~font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome';
