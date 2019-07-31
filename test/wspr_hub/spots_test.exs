@@ -8,7 +8,7 @@ defmodule WsprHub.SpotsTest do
   describe "spots" do
     @valid_attrs %{
       azimuth: 42,
-      band: 42,
+      band: "20m",
       callsign: "some callsign",
       code: "some code",
       distance: 42,
@@ -24,7 +24,7 @@ defmodule WsprHub.SpotsTest do
     }
     @update_attrs %{
       azimuth: 43,
-      band: 43,
+      band: "40m",
       callsign: "some updated callsign",
       code: "some updated code",
       distance: 43,
@@ -77,7 +77,7 @@ defmodule WsprHub.SpotsTest do
     test "create_spot/1 with valid data creates a spot" do
       assert {:ok, %Spot{} = spot} = Spots.create_spot(@valid_attrs)
       assert spot.azimuth == 42
-      assert spot.band == 42
+      assert spot.band == "20m"
       assert spot.callsign == "some callsign"
       assert spot.code == "some code"
       assert spot.distance == 42
@@ -100,7 +100,7 @@ defmodule WsprHub.SpotsTest do
       spot = spot_fixture()
       assert {:ok, %Spot{} = spot} = Spots.update_spot(spot, @update_attrs)
       assert spot.azimuth == 43
-      assert spot.band == 43
+      assert spot.band == "40m"
       assert spot.callsign == "some updated callsign"
       assert spot.code == "some updated code"
       assert spot.distance == 43

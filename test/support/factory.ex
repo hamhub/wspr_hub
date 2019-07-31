@@ -6,7 +6,7 @@ defmodule WsprHub.Factory do
   def spot_factory do
     %Spot{
       azimuth: 113,
-      band: 7,
+      band: "20m",
       callsign: sequence(:callsigns, &"WW#{&1}DX"),
       code: "",
       distance: 815,
@@ -18,7 +18,8 @@ defmodule WsprHub.Factory do
       reporter_grid: "some reporter_grid",
       snr: -19,
       spot_dt: DateTime.utc_now(),
-      version: "0.9_r1"
+      version: "0.9_r1",
+      ext_id: sequence(:ext_ids, &to_string/1)
     }
   end
 end
