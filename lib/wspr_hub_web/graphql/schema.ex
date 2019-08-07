@@ -3,6 +3,7 @@ defmodule WsprHubWeb.Schema do
   alias WsprHubWeb.Resolvers.{SpotResolver}
 
   import_types(Absinthe.Type.Custom)
+  import_types(WsprHubWeb.Schema.AccountsTypes)
   import_types(WsprHubWeb.Schema.BandTypes)
   import_types(WsprHubWeb.Schema.SpotTypes)
 
@@ -14,5 +15,9 @@ defmodule WsprHubWeb.Schema do
 
     import_fields(:spot_queries)
     import_fields(:band_queries)
+  end
+
+  mutation do
+    import_fields(:accounts_mutations)
   end
 end

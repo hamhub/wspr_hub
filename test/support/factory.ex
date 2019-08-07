@@ -2,6 +2,8 @@ defmodule WsprHub.Factory do
   use ExMachina.Ecto, repo: WsprHub.Repo
 
   alias WsprHub.Spots.Spot
+  alias WsprHub.Accounts.User
+  alias Absinthe.Utils
 
   def spot_factory do
     %Spot{
@@ -21,5 +23,24 @@ defmodule WsprHub.Factory do
       version: "0.9_r1",
       ext_id: sequence(:ext_ids, &to_string/1)
     }
+  end
+
+  def user_factory do
+    %User{
+      email: sequence(:email, &"email.#{&1}@example.com"),
+      display_name: "Test User",
+      callsign: sequence(:callsign, &"KD#{&1}DEP"),
+      grid: "EN50jd",
+      location: "Nowheresville, KT",
+      station_info: "Operating 1501 Watts using a toaster and a car battery."
+    }
+  end
+
+  def graphql_params_for(factory_name, attrs) do
+    factory_name
+    |> string_params_for(attrs)
+    |> Enum.into(%{}, fn {key, value} ->
+      {Utils.camelize(key, lower: true), value}
+    end)
   end
 end
