@@ -3,7 +3,6 @@ defmodule WsprHubWeb.Queries.SpotsTest do
   import WsprHub.Factory
 
   alias WsprHubWeb.Schema
-  alias WsprHub.Spots
 
   test "getting a list of spots" do
     spot = insert(:spot)

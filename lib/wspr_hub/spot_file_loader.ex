@@ -2,14 +2,30 @@ defmodule WsprHub.SpotFileLoader do
   alias WsprHub.Repo
   alias WsprHub.Spots.Spot
 
+  def fetch_data(year, month) do
+    Application.ensure_all_started(:inets)
+
+    {:ok, resp} =
+      :httpc.request(
+        :get,
+        {'http://wsprnet.org/archive/wsprspots-#{year}-#{month}.csv.gz', []},
+        [],
+        body_format: :binary
+      )
+
+    {{_, 200, 'OK'}, _headers, body} = resp
+
+    File.write("wspr_csv/wsprspots-#{year}-#{month}.csv.gz", body)
+  end
+
   def test_load do
-    load_file("wspr_csv/wsprspots-2019-07.csv")
+    load_file("wspr_csv/wsprspots-2019-07.csv.gz")
   end
 
   def load_file(filename) do
     filename
     |> Path.expand(File.cwd!())
-    |> File.stream!()
+    |> File.stream!([:read, :compressed])
     |> CSV.decode(
       headers: [
         :ext_id,
@@ -68,7 +84,7 @@ defmodule WsprHub.SpotFileLoader do
   end
 
   defp cast_band(spot_row) do
-    band = HamRadio.Band.at(spot_row.frequency * 1_000_000)
+    band = HamRadio.Bands.at(spot_row.frequency * 1_000_000)
 
     if is_nil(band) do
       Map.put(spot_row, :band, "Unknown band")
