@@ -5,7 +5,8 @@ import { DatabasePage } from './DatabasePage';
 import { HomePage } from './HomePage';
 import { AboutPage } from './AboutPage';
 import { DownloadsPage } from './DownloadsPage';
-
+import { SignUpPage } from './SignUpPage';
+import { LoginPage } from './LoginPage';
 export const Layout: React.FC = () => (
   <Fragment>
     <Header />
@@ -14,6 +15,11 @@ export const Layout: React.FC = () => (
       <Route path="/database" render={() => <DatabasePage />} />
       <Route path="/downloads" render={() => <DownloadsPage />} />
       <Route path="/about" render={() => <AboutPage />} />
+      <Route path="/sign_up" render={() => <SignUpPage />} />
+      <Route
+        path="/login"
+        render={({ history }) => <LoginPage history={history} />}
+      />
     </Switch>
   </Fragment>
 );

@@ -16,3 +16,8 @@ config :wspr_hub, WsprHubWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Configure Guardian
+config :wspr_hub, WsprHub.Guardian,
+  issuer: "wspr_hub",
+  secret_key: System.get_env("GUARDIAN_SECRET_KEY")

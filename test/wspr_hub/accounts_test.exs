@@ -151,5 +151,36 @@ defmodule WsprHub.AccountsTest do
       user = insert(:user)
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
+
+    test "authenticate_user/1 without email and password fails" do
+      insert(:user)
+
+      assert {:error, :not_found} = Accounts.authenticate_user(%{})
+    end
+
+    test "authenticate_user/1 with bad email fails" do
+      insert(:user)
+      assert {:error, :not_found} = Accounts.authenticate_user(%{email: "nevergunnamatch"})
+    end
+
+    test "authenticate_user/1 with email and bad password fails" do
+      user_params =
+        params_for(:user, %{password: "NotSimple1", password_confirmation: "NotSimple1"})
+
+      assert {:ok, %User{} = user} = Accounts.register_user(user_params)
+
+      assert {:error, :not_found} =
+               Accounts.authenticate_user(%{email: user.email, password: "wrongpassword"})
+    end
+
+    test "authenticate_user/1 with email and correct password succeeds" do
+      user_params =
+        params_for(:user, %{password: "NotSimple1", password_confirmation: "NotSimple1"})
+
+      assert {:ok, %User{} = user} = Accounts.register_user(user_params)
+
+      assert {:ok, %{token: _token}} =
+               Accounts.authenticate_user(%{email: user.email, password: "NotSimple1"})
+    end
   end
 end

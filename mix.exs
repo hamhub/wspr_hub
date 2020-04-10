@@ -57,6 +57,7 @@ defmodule WsprHub.MixProject do
       {:ham_radio, git: "https://github.com/hamhub/ham_radio_ex.git", branch: "develop"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
+      {:guardian, "~> 1.2"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false},

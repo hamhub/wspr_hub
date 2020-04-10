@@ -35,5 +35,8 @@ node_modules/
 
 *.iml
 .idea
+.vscode
 .elixir_ls/
 wspr_csv/
+.envrc
+yarn-error.log

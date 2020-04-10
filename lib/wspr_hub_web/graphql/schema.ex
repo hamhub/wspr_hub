@@ -13,6 +13,7 @@ defmodule WsprHubWeb.Schema do
       resolve(&SpotResolver.list_spots/3)
     end
 
+    import_fields(:accounts_queries)
     import_fields(:spot_queries)
     import_fields(:band_queries)
   end

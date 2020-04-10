@@ -13,6 +13,10 @@ defmodule WsprHubWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :graphql do
+    plug WsprHubWeb.Context
+  end
+
   scope "/post", WsprHubWeb do
     pipe_through :api
 
@@ -20,7 +24,20 @@ defmodule WsprHubWeb.Router do
     post "/", PostController, :submit
   end
 
-  forward "/graphql", Absinthe.Plug, schema: WsprHubWeb.Schema
+  scope "/graphql" do
+    pipe_through(:graphql)
+
+    forward "/", Absinthe.Plug, schema: WsprHubWeb.Schema
+  end
+
+  scope "/graphiql" do
+    pipe_through(:graphql)
+
+    forward "/", Absinthe.Plug.GraphiQL,
+      schema: WsprHubWeb.Schema,
+      interface: :simple,
+      context: %{pubsub: WsprHubWeb.Endpoint}
+  end
 
   # forward "/graphql",
   #   to: Absinthe.Plug,
@@ -32,11 +49,6 @@ defmodule WsprHubWeb.Router do
   #     schema: WsprHubWeb.Schema,
   #     interface: :simple
   #   ]
-
-  forward "/graphiql", Absinthe.Plug.GraphiQL,
-    schema: WsprHubWeb.Schema,
-    interface: :simple,
-    context: %{pubsub: WsprHubWeb.Endpoint}
 
   # Other scopes may use custom stacks.
   # scope "/api", WsprHubWeb do

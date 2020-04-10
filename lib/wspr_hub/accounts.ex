@@ -36,6 +36,16 @@ defmodule WsprHub.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
+
+  def get_user_by_email(email) do
+    User
+    |> Repo.get_by(email: String.downcase(email))
+    |> case do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
 
   @doc """
   Creates a user.
@@ -59,6 +69,22 @@ defmodule WsprHub.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def authenticate_user(%{email: email, password: password}) do
+    with {:ok, user} <- get_user_by_email(email),
+         true <- Comeonin.Bcrypt.checkpw(password, user.encrypted_password),
+         {:ok, token, _} <-
+           WsprHub.Guardian.encode_and_sign(user) do
+      {:ok, %{token: token}}
+    else
+      _ ->
+        {:error, :not_found}
+    end
+  end
+
+  def authenticate_user(_attrs) do
+    {:error, :not_found}
   end
 
   @doc """
